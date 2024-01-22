@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 import { Outlet, Navigate } from 'react-router-dom';
 
->>>>>>> a9670b8 (Added assets and started doing signup-form)
 const AuthLayout = () => {
   const isAuthenticated = false;
 
