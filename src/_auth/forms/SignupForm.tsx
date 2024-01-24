@@ -11,11 +11,13 @@ import { SignupValidation } from "@/lib/validation"
 import Loader from "@/components/shared/Loader"
 import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutations"
  
-const SignupForm = () => { // 1:38:31 !!!!!!!!!!!!!!!!!!!!
+const SignupForm = () => { // 1:43:48 !!!!!!!!!!!!!!!!!!!!
   const { toast } = useToast()
 
   const { mutateAsync: createUserAccount, isLoading: isCreatingUser } = useCreateUserAccount();
-  
+
+  const { mutateAsync: signInAccount, isLoading: isSigningIn } = useSignInAccount();
+
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
     defaultValues: {
@@ -33,7 +35,14 @@ const SignupForm = () => { // 1:38:31 !!!!!!!!!!!!!!!!!!!!
       return toast({ title: 'Sign up failed. Please try again.'})
     }
 
-    //const session = await signInAccount()
+    const session = await signInAccount(
+      email: values.email,
+      password: values.password,
+    )
+
+    if(!session) {
+      return toast({ title: 'Sign in failed. Please try again.' })
+    }
   }
   
   return (
