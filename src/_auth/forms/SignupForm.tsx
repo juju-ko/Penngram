@@ -12,7 +12,7 @@ import Loader from "@/components/shared/Loader"
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
  
-const SignupForm = () => { // 2:06:58 !!!!!!!!!!!!!!!!!!!!
+const SignupForm = () => { // 2:15:46 !!!!!!!!!!!!!!!!!!!!
   const { toast } = useToast();
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
   const navigate = useNavigate();
