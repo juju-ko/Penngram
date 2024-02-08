@@ -88,13 +88,30 @@ const PostForm = () => {
             <FormItem>
               <FormLabel className="shad-form_label">Add Tags (separated by comma " , ")</FormLabel>
               <FormControl>
-                <Input type="text" className="shad-input" />
+                <Input 
+									type="text" 
+									className="shad-input"
+									placeholder="Dogs, Cats, Cuties"
+								/>
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+				<div className="flex gap-4 items-center justify-end">
+					<Button 
+					type="button" 
+					className="shad-button_dark_4"
+					>
+					Cancel
+					</Button>
+					<Button 
+					type="submit"
+					className="shad-button_primary whitespace-nowrap"
+					>
+					Submit
+					</Button>
+				</div>
       </form>
     </Form>
   )
