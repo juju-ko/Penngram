@@ -1,6 +1,6 @@
 import { ID, Query } from 'appwrite';
 
-import { INewPost, INewUser } from "@/types";
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from './config';
 
 export async function createUserAccount(user: INewUser) {
@@ -105,6 +105,10 @@ export async function createPost(post: INewPost) {
 
 		// Get file url
 		const fileUrl = getFilePreview(uploadedFile.$id);
+    if(!fileUrl) {
+      await deleteFile(uploadedFile.$id);
+      throw Error;
+    }
 
     if (!fileUrl) {
       deleteFile(uploadedFile.$id);
@@ -122,6 +126,8 @@ export async function uploadFile(file: File) {
 			ID.unique(),
 			file
 		);
+
+    return uploadedFile;
 	} catch (error) {
 		console.log(error);
 	}
