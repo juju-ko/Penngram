@@ -105,6 +105,11 @@ export async function createPost(post: INewPost) {
 
 		// Get file url
 		const fileUrl = getFilePreview(uploadedFile.$id);
+
+    if (!fileUrl) {
+      deleteFile(uploadedFile.$id);
+      throw Error;
+    }
 	} catch (error) {
 		console.log(error);
 	}
@@ -120,4 +125,31 @@ export async function uploadFile(file: File) {
 	} catch (error) {
 		console.log(error);
 	}
+}
+
+export async function getFilePreview(fileId: string) {
+  try {
+    const fileUrl = storage.getFilePreview(
+      appwriteConfig.storageId,
+      fileId,
+      2000,
+      2000,
+      "top",
+      100,
+    )
+
+    return fileUrl;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteFile(fileId: string) {
+  try {
+    await storage.deleteFile(appwriteConfig.storageId, fileId);
+
+    return { status: 'ok' };
+  } catch (error) {
+    console.log(error);
+  }
 }
