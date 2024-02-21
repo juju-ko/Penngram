@@ -1,6 +1,6 @@
 import { ID, Query } from 'appwrite';
 
-import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
+import { INewPost, INewUser } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from './config';
 
 export async function createUserAccount(user: INewUser) {
@@ -63,22 +63,31 @@ export async function signInAccount(user: { email: string; password: string; }) 
   }
 }
 
-export async function getCurrentUser() {
+export async function getAccount() {
   try {
     const currentAccount = await account.get();
 
-    if(!currentAccount) throw Error;
+    return currentAccount;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getCurrentUser() {
+  try {
+    const currentAccount = await getAccount();
+
+    if (!currentAccount) throw Error;
 
     const currentUser = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
-      [Query.equal('accountId', currentAccount.$id)]
-    )
+      [Query.equal("accountId", currentAccount.$id)]
+    );
 
-    if(!currentUser) throw Error;
+    if (!currentUser) throw Error;
 
     return currentUser.documents[0];
-
   } catch (error) {
     console.log(error);
     return null;
@@ -101,7 +110,7 @@ export async function createPost(post: INewPost) {
 		// Upload image to storage
 		const uploadedFile = await uploadFile(post.file[0]);
 
-		if(!uploadedFile) throw Error;
+		if (!uploadedFile) throw Error;
 
 		// Get file url
 		const fileUrl = getFilePreview(uploadedFile.$id);
@@ -110,13 +119,8 @@ export async function createPost(post: INewPost) {
       throw Error;
     }
 
-    if (!fileUrl) {
-      deleteFile(uploadedFile.$id);
-      throw Error;
-    }
-
     // Convert tags in an arrat
-    const tags = post.tags?.replace(/ /g,'').split(',') || [];
+    const tags = post.tags?.replace(/ /g,"").split(",") || [];
 
     // Save post to database
     const newPost = await databases.createDocument(
@@ -129,7 +133,7 @@ export async function createPost(post: INewPost) {
         imageUrl: fileUrl,
         imageId: uploadedFile.$id,
         location: post.location,
-        tags: tags
+        tags: tags,
       }
     )
 
