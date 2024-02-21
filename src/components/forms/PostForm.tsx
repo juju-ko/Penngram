@@ -13,6 +13,7 @@ import { PostValidation } from "@/lib/validation"
 import { Models } from "appwrite"
 import { useUserContext } from "@/context/AuthContext"
 import { useToast } from "../ui/use-toast"
+import { useCreatePost } from "@/lib/react-query/queriesAndMutations"
 
 type PostFormProps = {
 	post?: Models.Document;
@@ -38,7 +39,7 @@ const PostForm = ({ post }: PostFormProps) => {
   async function onSubmit(values: z.infer<typeof PostValidation>) {
     const newPost = await createPost({
 			...values,
-			userID: user.id,
+			userId: user.id,
 		})
 
 		if(!newPost) {
