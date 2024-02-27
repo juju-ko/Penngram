@@ -8,6 +8,7 @@ import {
 	useLikePost, 
 	useSavePost 
 } from "@/lib/react-query/queriesAndMutations";
+import Loader from "./Loader";
 
 
 type PostStatsProps = {
@@ -18,12 +19,12 @@ type PostStatsProps = {
 const PostStats = ({ post, userId } : PostStatsProps) => {
 	const likesList = post.likes.map((user: Models.Document) => user.$id);
 
-	const [likes, setLikes] = useState<string[]>(likesList);
+	const [likes, setLikes] = useState(likesList);
 	const [isSaved, setIsSaved] = useState(false);
 	
 	const { mutate: likePost } = useLikePost();
-	const { mutate: savePost } = useSavePost();
-	const { mutate: deleteSavedPost } = useDeleteSavedPost();
+	const { mutate: savePost, isPending: isSavingPost } = useSavePost();
+	const { mutate: deleteSavedPost, isPending: isDeletingSaved } = useDeleteSavedPost();
 
 	const { data: currentUser } = useGetCurrentUser();
 
@@ -59,11 +60,11 @@ const PostStats = ({ post, userId } : PostStatsProps) => {
 
     if (savedPostRecord) {
       setIsSaved(false);
-      return deleteSavedPost(savedPostRecord.$id);
-    }
-
-    savePost({ userId: userId, postId: post.$id });
-    setIsSaved(true);
+      deleteSavedPost(savedPostRecord.$id);
+    } else {
+			savePost({ postId: post.$id, userId });
+			setIsSaved(true);
+		}
   };
 
   const containerStyles = location.pathname.startsWith("/profile")
@@ -90,14 +91,17 @@ const PostStats = ({ post, userId } : PostStatsProps) => {
       </div>
 
       <div className="flex gap-2">
-				<img
-          src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
+				{isSavingPost || isDeletingSaved ? <Loader /> :<img
+          src={isSaved 
+						? "/assets/icons/saved.svg" 
+						: "/assets/icons/save.svg"
+					}
           alt="share"
           width={20}
           height={20}
           onClick={(e) => handleSavePost(e)}
           className="cursor-pointer"
-        />
+        />}
       </div>
     </div>
   );
