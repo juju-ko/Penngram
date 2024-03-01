@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
