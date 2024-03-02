@@ -1,5 +1,7 @@
 ## Penngram
 
+![sneakpeek](public/assets/images/sneakpeek.png)
+
 Penngram is a social media platform similar to Instagram, developed using React, Vite, TypeScript, and easy backend by Appwrite.io.
 
 **Key Features:**
