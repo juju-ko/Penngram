@@ -12,9 +12,9 @@ import Loader from "@/components/shared/Loader"
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
  
-const SignupForm = () => { // 5:43:01 !!!!!!!!!!!!!!!!!!!!
+const SignupForm = () => {
   const { toast } = useToast();
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const { checkAuthUser } = useUserContext();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof SignupValidation>>({
@@ -28,7 +28,7 @@ const SignupForm = () => { // 5:43:01 !!!!!!!!!!!!!!!!!!!!
   })
 
   const { mutateAsync: createUserAccount, isPending: isCreatingUser} = useCreateUserAccount();
-  const { mutateAsync: signInAccount, isPending: isSigningInUser } = useSignInAccount();
+  const { mutateAsync: signInAccount } = useSignInAccount();
 
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     const newUser = await createUserAccount(values);
