@@ -6,4 +6,5 @@ export enum QUERY_KEYS {
 	GET_INFINITE_POSTS = "getInfinitePosts",
 	SEARCH_POSTS = "searchPosts",
 	GET_USERS = "getUsers",
+	GET_USER_BY_ID = "getUserById",
 }
