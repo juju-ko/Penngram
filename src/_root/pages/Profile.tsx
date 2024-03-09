@@ -1,12 +1,10 @@
 import Loader from '@/components/shared/Loader';
 import StatBar from '@/components/shared/StatBar';
-import { useUserContext } from '@/context/AuthContext'
 import { useGetUserById } from '@/lib/react-query/queriesAndMutations';
 import { useParams } from 'react-router-dom'
 
 const Profile = () => {
 	const { id } = useParams();
-	const { user } = useUserContext();
 
 	const { data: currentUser } = useGetUserById(id || '');
 
