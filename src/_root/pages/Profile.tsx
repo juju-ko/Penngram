@@ -1,10 +1,16 @@
+import GridPostList from '@/components/shared/GridPostList';
 import Loader from '@/components/shared/Loader';
 import StatBar from '@/components/shared/StatBar';
+import { Button } from '@/components/ui/button';
+import { useUserContext } from '@/context/AuthContext';
 import { useGetUserById } from '@/lib/react-query/queriesAndMutations';
-import { useParams } from 'react-router-dom'
+import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { LikedPosts } from '.';
 
 const Profile = () => {
 	const { id } = useParams();
+  const { user } = useUserContext();
+	const { pathname } = useLocation();
 
 	const { data: currentUser } = useGetUserById(id || '');
 
@@ -38,8 +44,41 @@ const Profile = () => {
             </div>
 
             <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">{currentUser.bio}</p>
+
+						<div className="flex justify-center gap-4">
+              <div className={`${user.id !== currentUser.$id && 'hidden'}`}>
+                <Link to={`/update-profile/${currentUser.$id}`} className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${user.id !== currentUser.$id && 'hidden'}`}>
+                    <img src={'/assets/icons/edit.svg'} alt="edit" width={20} height={20} />
+                    <p className="flex whitespace-nowrap small-medium">Edit Profile</p>
+                </Link>
+              </div>
+              <div className={`${user.id === id && 'hidden'}`}>
+                <Button type="button" className="shad-button_primary px-8">
+                  Follow
+                </Button>
+              </div>
+            </div>
           </div>
 				</div>
+
+				{currentUser.$id === user.id && (
+          <div className="flex max-w-5xl w-full">
+            <Link to={`/profile/${id}`} className={`profile-tab rounded-l-lg ${pathname === `/profile/${id}` && '!bg-dark-3'}`}>
+              <img src={'/assets/icons/posts.svg'} alt="posts" width={20} height={20} />
+              Posts
+            </Link>
+            <Link to={`/profile/${id}/liked-posts`} className={`profile-tab rounded-r-lg ${pathname === `/profile/${id}/liked-posts` && '!bg-dark-3'}`}>
+              <img src={'/assets/icons/like.svg'} alt="like" width={20} height={20} />
+              Liked Posts
+            </Link>
+          </div>
+        )}
+
+				<Routes>
+          <Route index element={<GridPostList posts={currentUser.posts} showUser={false} />} />
+          {currentUser.$id === user.id && <Route path="/liked-posts" element={<LikedPosts />} />}
+        </Routes>
+        <Outlet />
 			</div>
 		</div>
 	)
