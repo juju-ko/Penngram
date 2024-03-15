@@ -33,7 +33,7 @@ const Explore = () => {
 	posts?.pages.every((item) => item?.documents.length === 0);
 
 	return (
-		<div className="common-container"> 
+		<div className="explore-container"> 
 			<div className="explore-inner_container">
 				<h2 className="h3-bold md:h2-bold w-full">Explore</h2>
 				<div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
